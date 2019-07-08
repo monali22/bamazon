@@ -54,11 +54,11 @@ function viewProducts(){
 }
 
 function viewLowInventory(){
-    connection.query("SELECT * from products WHERE stock_quantity<?",[5], function(err,response){
+    connection.query("SELECT * from products WHERE stock_quantity<=?",[5], function(err,response){
         if(err) throw err;
         console.table(response);
         connection.end();
-    })
+    });
 }
 
 function addToInventory(){

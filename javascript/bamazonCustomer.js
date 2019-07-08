@@ -50,10 +50,11 @@ function showProducts(){
 function buyTheProduct(item_id,quantity){
     item_id=parseInt(item_id);
     quantity=parseInt(quantity);
-    var query = connection.query("SELECT stock_quantity,price from products WHERE item_id=?",[item_id],function(err,resp){
+    var query = connection.query("SELECT stock_quantity,price,product_sales from products WHERE item_id=?",[item_id],function(err,resp){
         if(err) throw err;
         //console.log(resp[0].stock_quantity);
-       var price=resp[0].price
+       var price=resp[0].price;
+       var sales=resp[0].product_sales;
         if(resp[0].stock_quantity>quantity){
             connection.query(
                 "UPDATE products SET ? WHERE ?",
@@ -76,7 +77,7 @@ function buyTheProduct(item_id,quantity){
                     "UPDATE products SET ? WHERE ?",
                     [
                         {
-                            product_sales:quantity*price
+                            product_sales:sales+(quantity*price)
                         },
                         {
                             item_id:item_id
@@ -84,7 +85,7 @@ function buyTheProduct(item_id,quantity){
                     ],
                     function(err,resp){
                         if(err) throw err;
-                        console.log(resp);
+                        //console.log(resp);
                     }
                     );
          
